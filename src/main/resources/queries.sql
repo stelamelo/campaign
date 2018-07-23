@@ -1,3 +1,6 @@
+create database campaign;
+use campaign;
+
 create table campaign (
   id bigint not null auto_increment,
   name varchar(45) not null,
