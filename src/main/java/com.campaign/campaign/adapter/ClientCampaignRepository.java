@@ -1,6 +1,12 @@
 package com.campaign.campaign.adapter;
 
+import com.campaign.campaign.model.Campaign;
+
+import java.util.List;
+
 public interface ClientCampaignRepository {
 
-    void insertClientCampaign(int clientId, int campaignId);
+    boolean insertClientCampaign(int clientId, int campaignId);
+
+    List<Campaign> findAssociationByCampaignId(int campaignId);
 }

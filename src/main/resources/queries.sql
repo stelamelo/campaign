@@ -1,7 +1,4 @@
-create database campaign;
-use campaign;
-
-create table campaign (
+create table if not exists campaign(
   id bigint not null auto_increment,
   name varchar(45) not null,
   team_id bigint not null,
@@ -10,7 +7,7 @@ create table campaign (
   primary key (id)
 );
 
-create table client(
+create table if not exists client(
   id bigint not null auto_increment,
   name varchar(45) not null,
   email varchar(45) not null,
@@ -19,7 +16,7 @@ create table client(
   primary key (id)
 );
 
-create table client_campaign(
+create table if not exists client_campaign(
   id bigint not null auto_increment,
   client_id bigint not null,
   campaign_id bigint not null,

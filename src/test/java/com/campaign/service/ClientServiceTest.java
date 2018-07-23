@@ -52,8 +52,8 @@ public class ClientServiceTest {
         when(clientRepository.insertClient(client)).thenReturn(client);
         when(campaignService.findCampaignsByTeamId(client.getTeamId())).thenReturn(campaigns);
         when(campaignService.findCampaignByClientAndCampaignId(client.getId(), campaign.getId())).thenReturn(null);
-        doNothing().when(clientCampaignRepository).insertClientCampaign(client.getId(), campaign.getId());
-        doNothing().when(clientCampaignRepository).insertClientCampaign(client.getId(), campaign2.getId());
+        when(clientCampaignRepository.insertClientCampaign(client.getId(), campaign.getId())).thenReturn(true);
+        when(clientCampaignRepository.insertClientCampaign(client.getId(), campaign2.getId())).thenReturn(true);
 
         List<Campaign> expectedCampaigns = clientService.insertClient(client);
 
@@ -79,7 +79,7 @@ public class ClientServiceTest {
         when(campaignService.findCampaignsByTeamId(client.getTeamId())).thenReturn(campaigns);
         when(campaignService.findCampaignByClientAndCampaignId(client.getId(), campaign.getId())).thenReturn(null);
         when(campaignService.findCampaignByClientAndCampaignId(client.getId(), campaign2.getId())).thenReturn(campaign2);
-        doNothing().when(clientCampaignRepository).insertClientCampaign(client.getId(), campaign.getId());
+        when(clientCampaignRepository.insertClientCampaign(client.getId(), campaign.getId())).thenReturn(true);
 
         campaigns.add(campaign2);
 

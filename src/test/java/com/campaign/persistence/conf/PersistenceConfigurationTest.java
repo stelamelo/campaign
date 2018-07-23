@@ -1,34 +1,32 @@
 package com.campaign.persistence.conf;
 
-import com.zaxxer.hikari.HikariDataSource;
+import com.campaign.campaign.util.InputStreamUtil;
 import org.jdbi.v3.core.Jdbi;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.jdbi.v3.sqlobject.SqlObjectPlugin;
+import org.junit.After;
+import org.junit.Before;
 
 import java.io.InputStream;
 
-@Configuration
 public class PersistenceConfigurationTest {
 
     protected Jdbi jdbi;
-    private HikariDataSource dataSource;
 
-    @Bean
-    public HikariDataSource getDataSource() {
-        dataSource = new HikariDataSource();
-        dataSource.setJdbcUrl("jdbc:h2:mem");
-        dataSource.setUsername("sa");
-        dataSource.setPassword("");
-        return dataSource;
-    }
+    @Before
+    public void initializeJdbi() {
+        jdbi = Jdbi.create("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
+        jdbi.installPlugin(new SqlObjectPlugin());
+        InputStream resourceStream = this.getClass().getResourceAsStream("/queries.sql");
+        String queries = InputStreamUtil.getContentAsStringFromInputStream(resourceStream);
+        String[] statements = queries.split(";");
 
-    @Bean
-    public Jdbi jdbi() {
-        jdbi = Jdbi.create(dataSource);
         jdbi.withHandle(handle -> {
-            InputStream resourceStream = this.getClass().getResourceAsStream("/queries.sql");
-            return handle.execute(String.valueOf(resourceStream));
+            int output = 0;
+            for (String statement : statements) {
+                output = output + handle.execute(statement);
+            }
+
+            return output;
         });
-        return jdbi;
     }
 }

@@ -12,7 +12,7 @@ public interface ClientCampaignDAO {
     @SqlUpdate("INSERT INTO client_campaign(client_id, campaign_id) VALUES(?, ?)")
     boolean insertCampaign(int clientId, int campaignId);
 
-    @SqlQuery("SELECT * FROM client_campaign WHERE client_id=? AND campaign_id=?")
+    @SqlQuery("SELECT * FROM client_campaign WHERE campaign_id=?")
     @RegisterBeanMapper(Campaign.class)
-    Campaign findCampaignByClientAndCampaignId(int clientId, int campaignId);
+    List<Campaign> findAssociationByCampaignId(int campaignId);
 }

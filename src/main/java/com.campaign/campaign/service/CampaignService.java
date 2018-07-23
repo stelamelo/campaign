@@ -1,6 +1,7 @@
 package com.campaign.campaign.service;
 
 import com.campaign.campaign.adapter.CampaignRepository;
+import com.campaign.campaign.adapter.ClientCampaignRepository;
 import com.campaign.campaign.model.Campaign;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,10 +14,12 @@ import java.util.List;
 public class CampaignService {
 
     private final CampaignRepository campaignRepository;
+    private final ClientCampaignRepository clientCampaignRepository;
 
     @Autowired
-    public CampaignService(CampaignRepository campaignRepository) {
+    public CampaignService(CampaignRepository campaignRepository, ClientCampaignRepository clientCampaignRepository) {
         this.campaignRepository = campaignRepository;
+        this.clientCampaignRepository = clientCampaignRepository;
     }
 
     public Campaign insertCampaign(Campaign campaign) {
@@ -30,6 +33,11 @@ public class CampaignService {
     }
 
     public boolean deleteCampaign(int campaignId) {
+        List<Campaign> campaignsWithAssociation = clientCampaignRepository.findAssociationByCampaignId(campaignId);
+        if(!campaignsWithAssociation.isEmpty()) {
+            throw new IllegalStateException("Cannot delete. Given campaign is associated with one or more clients");
+        }
+
         return campaignRepository.deleteCampaign(campaignId);
     }
 

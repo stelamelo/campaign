@@ -27,10 +27,6 @@ public interface CampaignDAO {
     @RegisterBeanMapper(Campaign.class)
     List<Campaign> findCampaignsByTeamId(int teamId);
 
-    @SqlQuery("SELECT c.* FROM client_campaign cc INNER JOIN campaign c on cc.campaign_id = c.id WHERE cc.client_id = ?")
-    @RegisterBeanMapper(Campaign.class)
-    List<Campaign> findCampaignsByClientId(int clientId);
-
     @SqlQuery("SELECT c.* FROM client_campaign cc INNER JOIN campaign c on cc.campaign_id = c.id WHERE cc.client_id = ? AND cc.campaign_id=?")
     @RegisterBeanMapper(Campaign.class)
     Campaign findCampaignByClientAndCampaignId(int clientId, int campaignId);

@@ -1,6 +1,7 @@
 package com.campaign.service;
 
 import com.campaign.campaign.adapter.CampaignRepository;
+import com.campaign.campaign.adapter.ClientCampaignRepository;
 import com.campaign.campaign.model.Campaign;
 import com.campaign.campaign.service.CampaignService;
 import org.junit.Before;
@@ -21,11 +22,13 @@ public class CampaignServiceTest {
 
     private CampaignService campaignService;
     private CampaignRepository campaignRepository;
+    private ClientCampaignRepository clientCampaignRepository;
 
     @Before
     public void setup() {
         campaignRepository = mock(CampaignRepository.class);
-        campaignService = new CampaignService(campaignRepository);
+        clientCampaignRepository = mock(ClientCampaignRepository.class);
+        campaignService = new CampaignService(campaignRepository, clientCampaignRepository);
     }
 
     @Test
@@ -44,7 +47,19 @@ public class CampaignServiceTest {
     @Test
     public void shouldDeleteCampaignSuccessfully() {
         when(campaignRepository.deleteCampaign(1)).thenReturn(true);
+        when(clientCampaignRepository.findAssociationByCampaignId(1)).thenReturn(new ArrayList<>());
         assertTrue(campaignService.deleteCampaign(1));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void shouldThrowExceptionWhenCannotDelete() {
+        Campaign campaign = new Campaign(1, "campaign1", 1, new Timestamp(new Date().getTime()), new Timestamp(new Date().getTime()));
+        List<Campaign> campaigns = new ArrayList<>();
+        campaigns.add(campaign);
+
+        when(clientCampaignRepository.findAssociationByCampaignId(1)).thenReturn(campaigns);
+
+        campaignService.deleteCampaign(1);
     }
 
     @Test

@@ -20,6 +20,13 @@ public class Campaign {
         this.setEndDate(endDate);
     }
 
+    public Campaign(String name, int teamId, Timestamp startDate, Timestamp endDate) {
+        this.setName(name);
+        this.setTeamId(teamId);
+        this.setStartDate(startDate);
+        this.setEndDate(endDate);
+    }
+
     public String getName() {
         return name;
     }

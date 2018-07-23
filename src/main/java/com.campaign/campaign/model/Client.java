@@ -20,6 +20,13 @@ public class Client {
         this.setTeamId(teamId);
     }
 
+    public Client(String name, String email, Timestamp birthDate, int teamId) {
+        this.setName(name);
+        this.setEmail(email);
+        this.setBirthDate(birthDate);
+        this.setTeamId(teamId);
+    }
+
     public int getId() {
         return id;
     }
